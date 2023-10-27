@@ -17,20 +17,24 @@ const SignIn: React.FC = () => {
   };
 
   return (
-    <div>
-      <input 
+    <div className="min-h-screen flex items-center justify-center join">
+      <input
         type="email"
         placeholder="Email"
+        className="input input-bordered input-md w-full max-w-xs join-item"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
       <input 
         type="password"
         placeholder="Password"
+        className="input input-bordered input-md w-full max-w-xs join-item"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button onClick={handleSignIn}>Sign In</button>
+      <button
+       className="btn join-item btn-primary"
+       onClick={handleSignIn}>Sign In</button>
     </div>
   );
 };
