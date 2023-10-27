@@ -9,7 +9,9 @@ interface AuthContextProps {
 }
 
 // 1. Define the AuthContext and its default value
-export const AuthContext = createContext<AuthContextProps | undefined>(undefined);
+export const AuthContext = createContext<AuthContextProps | undefined>({
+  user: null
+});
 
 // 2. Define a type for the AuthProvider props
 type AuthProviderProps = {
@@ -20,10 +22,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = auth.onAuthStateChanged((user: User | null) => {
       setUser(user);
-    });
-
+  });
+  
     return () => unsubscribe();
   }, []);
 
