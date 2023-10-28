@@ -29,29 +29,36 @@ const App: React.FC = () => {
   const { user } = authContext
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={user ? <Home /> : <Navigate to="/signin" />} />
-        <Route
-          path="/signin"
-          element={!user ? <SignIn /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/stats"
-          element={user ? <Stats /> : <Navigate to="/signin" />}
-        />
-        <Route
-          path="/users"
-          element={user ? <Users /> : <Navigate to="/signin" />}
-        />
-        <Route
-          path="/match"
-          element={user ? <Match /> : <Navigate to="/match" />}
-        />
-      </Routes>
-      {/* Persistent Bottom Navigation if user is authenticated */}
-      {user && <BottomNav />}
-    </Router>
+    <div className="min-h-screen flex flex-col items-center justify-center">
+      <div className="p-10 rounded-3xl shadow-md w-96">
+        <Router>
+          <Routes>
+            <Route
+              path="/"
+              element={user ? <Home /> : <Navigate to="/signin" />}
+            />
+            <Route
+              path="/signin"
+              element={!user ? <SignIn /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/stats"
+              element={user ? <Stats /> : <Navigate to="/signin" />}
+            />
+            <Route
+              path="/users"
+              element={user ? <Users /> : <Navigate to="/signin" />}
+            />
+            <Route
+              path="/match"
+              element={user ? <Match /> : <Navigate to="/match" />}
+            />
+          </Routes>
+          {/* Persistent Bottom Navigation if user is authenticated */}
+          {user && <BottomNav />}
+        </Router>
+      </div>
+    </div>
   )
 }
 
