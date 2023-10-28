@@ -23,7 +23,7 @@
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
-    "public": "public",
+    "public": "./oscar-fe/build",
     "ignore": [
       "firebase.json",
       "**/.*",
