@@ -30,7 +30,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center">
-      <div className="p-10 rounded-3xl shadow-md w-96">
+      <div className="p-10 rounded-3xl shadow-md">
         <Router>
           <Routes>
             <Route
