@@ -55,8 +55,7 @@ const App: React.FC = () => {
             />
           </Routes>
           {/* Persistent Bottom Navigation if user is authenticated */}
-          console.log("User State:", user);
-          {user && <BottomNav />}
+          {/* {user && <BottomNav />} */}
           <BottomNav />
         </Router>
       </div>
