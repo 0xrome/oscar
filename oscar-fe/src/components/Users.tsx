@@ -13,10 +13,9 @@ const Users: React.FC = () => {
         id: doc.id,
         ...doc.data(),
       }))
-      console.log('Fetched data:', data)
+
       setUsers(data)
     }
-
     fetchData()
   }, [])
 
@@ -39,26 +38,21 @@ const Users: React.FC = () => {
                   <div className="avatar">
                     <div className="mask mask-squircle w-12 h-12">
                       <img
-                        src={user['Please upload a photo of yourself']}
+                        src={user.answers[28].file_url}
                         alt="Avatar Tailwind CSS Component"
                       />
                     </div>
                   </div>
                   <div>
-                    <div className="font-bold">{user['First Name:']}</div>
+                    <div className="font-bold">{user.answers[0].text}</div>
                     <div className="text-sm opacity-50">
-                      {user['Last Name:']}
+                      {user.answers[1].text}
                     </div>
                   </div>
                 </div>
               </td>
-              <td>
-                {' '}
-                {new Date(
-                  user['What is your date of birth?'],
-                ).toLocaleDateString()}
-              </td>
-              <td>{user['Phone number:']}</td>
+              <td>{user.answers[4].date}</td>
+              <td>{user.answers[3].phone_number}</td>
             </tr>
           ))}
         </tbody>
