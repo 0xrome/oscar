@@ -13,6 +13,8 @@ const Users: React.FC = () => {
         id: doc.id,
         ...doc.data(),
       }))
+      console.log('Fetched data:', data)
+      data.map((user) => console.log('User:', user))
 
       setUsers(data)
     }
@@ -28,6 +30,8 @@ const Users: React.FC = () => {
             <th>User</th>
             <th>Date of Birth</th>
             <th>Phone Number</th>
+            <th>User Attributes</th>
+            <th>User Preferences</th>
           </tr>
         </thead>
         <tbody>
@@ -53,6 +57,8 @@ const Users: React.FC = () => {
               </td>
               <td>{user.answers[4].date}</td>
               <td>{user.answers[3].phone_number}</td>
+              <td>{user.attributesVector[0]}</td>
+              <td>{user.preferencesVector[0]}</td>
             </tr>
           ))}
         </tbody>
