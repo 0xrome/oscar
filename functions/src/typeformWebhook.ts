@@ -5,6 +5,11 @@ import admin = require("firebase-admin");
 
 const app = express();
 
+// Initialize Firebase Admin SDK
+if (!admin.apps.length) {
+    admin.initializeApp();
+}
+
 // Use body-parser middleware to parse the incoming JSON
 app.use(bodyParser.json());
 
