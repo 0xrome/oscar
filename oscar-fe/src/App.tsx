@@ -17,7 +17,6 @@ import Match from 'components/Match'
 const App: React.FC = () => {
   const authContext = useAuth()
 
-  console.log(authContext)
   if (!authContext) {
     // Handle the error or the scenario when the context is not provided.
     // You could return a loading spinner or a message or null.
@@ -55,8 +54,8 @@ const App: React.FC = () => {
             />
           </Routes>
           {/* Persistent Bottom Navigation if user is authenticated */}
-          {/* {user && <BottomNav />} */}
-          <BottomNav />
+          {user && <BottomNav />}
+          {/* <BottomNav /> */}
         </Router>
       </div>
     </div>

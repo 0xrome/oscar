@@ -57,8 +57,8 @@ const Users: React.FC = () => {
               </td>
               <td>{user.answers[4].date}</td>
               <td>{user.answers[3].phone_number}</td>
-              <td>{user.attributesVector[0]}</td>
-              <td>{user.preferencesVector[0]}</td>
+              {/* <td>{user.attributesVector[0]}</td>
+              <td>{user.preferencesVector[0]}</td> */}
             </tr>
           ))}
         </tbody>

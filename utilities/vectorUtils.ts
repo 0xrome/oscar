@@ -1,4 +1,4 @@
-export function attributesToVector(userAttributes: any): number[] {
+export const attributesToVector = (userAttributes: any): number[] => {
     let date = new Date(userAttributes.date);
     let year = date.getFullYear();
     let month = date.getMonth() + 1; // Months are zero-based
@@ -17,7 +17,7 @@ export function attributesToVector(userAttributes: any): number[] {
     ];
 }
 
-export function preferencesToVector(userPreferences: any): number[] {
+export const preferencesToVector = (userPreferences: any): number[] => {
     return [
         userPreferences.introExtroAttraction,
         userPreferences.heightImportance,

@@ -2,10 +2,14 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import admin from 'firebase-admin';
 
 // Initialize environment variables from .env file
 dotenv.config();
 
+// Note: Initialize the app only once. If you have initialized elsewhere, 
+// remove it here.
+admin.initializeApp();
 const app = express();
 
 // Use middleware

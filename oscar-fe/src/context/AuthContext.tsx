@@ -1,35 +1,35 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../config/firebaseConfig';
-import { User } from 'firebase/auth';
-
+import React, { createContext, useContext, useEffect, useState } from 'react'
+import { auth } from '../config/firebaseConfig'
+import { User } from 'firebase/auth'
 
 interface AuthContextProps {
-  user: User | null;
+  user: User | null
 }
 
 // 1. Define the AuthContext and its default value
 export const AuthContext = createContext<AuthContextProps | undefined>({
-  user: null
-});
+  user: null,
+})
 
 // 2. Define a type for the AuthProvider props
 type AuthProviderProps = {
-    children: React.ReactNode;
-};
+  children: React.ReactNode
+}
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user: User | null) => {
-      setUser(user);
-  });
-  
-    return () => unsubscribe();
-  }, []);
+      setUser(user)
+    })
 
-  return <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>;
-};
+    return () => unsubscribe()
+  }, [])
 
-export const useAuth = () => useContext(AuthContext);
+  return (
+    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+  )
+}
+
+export const useAuth = () => useContext(AuthContext)

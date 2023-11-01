@@ -16,14 +16,13 @@ app.post("/typeform-webhook", async (
   // Ensure it's a valid Typeform payload
   if (formResponse && formResponse.form_response) {
     console.log(formResponse.form_response);
-    // Store the data in Firebase 
     const db = admin.firestore();
     const docRef = db.collection("typeformResponses").doc();
     try {
-        await docRef.set(formResponse.form_response);
-        console.log('Data successfully written to Firestore');
+      await docRef.set(formResponse.form_response);
+      console.log("Data successfully written to Firestore");
     } catch (error) {
-        console.error('Error writing to Firestore:', error);
+      console.error("Error writing to Firestore:", error);
     }
   }
 
