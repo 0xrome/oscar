@@ -7,7 +7,7 @@ const app = express();
 
 // Initialize Firebase Admin SDK
 if (!admin.apps.length) {
-    admin.initializeApp();
+  admin.initializeApp();
 }
 
 // Use body-parser middleware to parse the incoming JSON

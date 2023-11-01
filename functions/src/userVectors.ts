@@ -1,11 +1,11 @@
 import {attributesToVector,
   preferencesToVector} from "../../utilities/vectorUtils";
 import functions = require("firebase-functions");
-const admin = require("firebase-admin");
+import admin = require("firebase-admin");
 
 // Initialize Firebase Admin SDK
 if (!admin.apps.length) {
-    admin.initializeApp();
+  admin.initializeApp();
 }
 
 export const addUserVectors = functions.firestore
