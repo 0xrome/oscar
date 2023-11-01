@@ -9,7 +9,7 @@ if (!admin.apps.length) {
 }
 
 export const addUserVectors = functions.firestore
-  .document("users/{userId}")
+  .document("typeformResponses/{userId}")
   .onCreate(async (snapshot: { data: () => any; ref: { update: (arg0:
     { attributesVector: number[]; preferencesVector: number[]; }) => any; }; },
   context: any) => {
