@@ -3,6 +3,8 @@ import {attributesToVector,
 import functions = require("firebase-functions");
 import admin = require("firebase-admin");
 
+import { updateUserIndex } from '../../src/annoy/updateUserIndex'; // Adjust the path to the correct location of updateUserIndex.ts
+
 // Initialize Firebase Admin SDK
 if (!admin.apps.length) {
   admin.initializeApp();
@@ -49,8 +51,12 @@ export const addUserVectors = functions.firestore
     console.log("Preferences Vector:", preferencesVector);
 
     // Update the Firestore document with the vectors
-    return snapshot.ref.update({
+    await snapshot.ref.update({
       attributesVector: attributesVector,
       preferencesVector: preferencesVector,
     });
+
+    // Call updateUserIndex once Firestore update is done
+    console.log("calling updateUserIndex...");
+    updateUserIndex(context.params.userId, attributesVector, preferencesVector);
   });
