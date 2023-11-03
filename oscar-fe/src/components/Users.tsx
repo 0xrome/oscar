@@ -15,6 +15,7 @@ const Users: React.FC = () => {
       }))
       console.log('Fetched data:', data)
       data.map((user) => console.log('User:', user))
+      console.log(data)
 
       setUsers(data)
     }
@@ -57,8 +58,22 @@ const Users: React.FC = () => {
               </td>
               <td>{user.answers[4].date}</td>
               <td>{user.answers[3].phone_number}</td>
-              {/* <td>{user.attributesVector[0]}</td>
-              <td>{user.preferencesVector[0]}</td> */}
+              <td>
+                {
+                  // Check if attributesVector exists and has values, else display "no values"
+                  user.attributesVector && user.attributesVector.length > 0
+                    ? user.attributesVector.join(', ')
+                    : 'no values'
+                }
+              </td>
+              <td>
+                {
+                  // Check if preferencesVector exists and has values, else display "no values"
+                  user.preferencesVector && user.preferencesVector.length > 0
+                    ? user.preferencesVector.join(', ')
+                    : 'no values'
+                }
+              </td>
             </tr>
           ))}
         </tbody>
