@@ -22,7 +22,7 @@ export const preferencesToVector = (userPreferences: any): number[] => {
         userPreferences.introExtroAttraction,
         userPreferences.heightImportance,
         userPreferences.ambitionImportance,
-        userPreferences.desiredAgeRangeStart,
-        userPreferences.desiredAgeRangeEnd
+        // userPreferences.desiredAgeRangeStart,
+        // userPreferences.desiredAgeRangeEnd
     ];
 }

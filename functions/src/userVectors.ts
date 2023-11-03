@@ -14,9 +14,13 @@ export const addUserVectors = functions.firestore
     { attributesVector: number[]; preferencesVector: number[]; }) => any; }; },
   context: any) => {
     const userData = snapshot.data();
+    console.log("User Data:", userData);
+
 
     // Assuming your Typeform data has a consistent structure
     // Extract attributes and preferences
+    // typeform responses are i+2 the answers array (ISH!)
+    // e.g. typeform question 32 = answers[30]
     const userAttributes = {
       date: userData.answers[4].date,
       nationalityIndex: 0, // map from choice to index
@@ -24,18 +28,25 @@ export const addUserVectors = functions.firestore
       introExtroScale: userData.answers[19].number,
       ambitionScale: userData.answers[20].number,
     };
+    console.log("User Attributes:", userAttributes);
+
 
     const userPreferences = {
-      introExtroAttraction: userData.answers[21].number,
-      heightImportance: userData.answers[22].number,
-      ambitionImportance: userData.answers[23].number,
-      desiredAgeRangeStart: userData.answers[24].number,
-      desiredAgeRangeEnd: userData.answers[25].number,
+      introExtroAttraction: userData.answers[31].number,
+      heightImportance: userData.answers[37].number,
+      ambitionImportance: userData.answers[39].number,
+    //   desiredAgeRangeStart: userData.answers[24].number,
+    //   desiredAgeRangeEnd: userData.answers[30].labels.first,
     };
+    console.log("User Preferences:", userPreferences);
+
 
     // Convert the attributes and preferences to vectors
     const attributesVector = attributesToVector(userAttributes);
     const preferencesVector = preferencesToVector(userPreferences);
+
+    console.log("Attributes Vector:", attributesVector);
+    console.log("Preferences Vector:", preferencesVector);
 
     // Update the Firestore document with the vectors
     return snapshot.ref.update({
