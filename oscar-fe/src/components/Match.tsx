@@ -7,8 +7,9 @@ const Match: React.FC = () => {
 
   const handleQuery = () => {
     const type: 'attributes' | 'preferences' = 'attributes' // Adjust as necessary
-    const nearestNeighbours = queryNearestNeighbour(userVector, type)
-    setResult(nearestNeighbours)
+    const { neighbours } = queryNearestNeighbour(userVector, type)
+    console.log(neighbours)
+    setResult(Array.from(neighbours).map(String))
   }
 
   return (
