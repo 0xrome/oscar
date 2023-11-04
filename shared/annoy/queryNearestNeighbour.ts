@@ -1,6 +1,6 @@
 const AnnoyIndex = require('annoy-node');
 
-export function queryNearestNeighbors(userVector: number[], type: 'attributes' | 'preferences'): string[] {
+export function queryNearestNeighbour(userVector: number[], type: 'attributes' | 'preferences'): string[] {
     console.log("querying nearest neighbours");
     // Load the appropriate index based on the type
     const indexFile = type === 'attributes' ? 'attributes.ann' : 'preferences.ann';
@@ -11,8 +11,8 @@ export function queryNearestNeighbors(userVector: number[], type: 'attributes' |
     const NUM_NEIGHBORS = 1;
   
     // Query the index
-    const nearestNeighbors = index.getNNsByVector(userVector, NUM_NEIGHBORS);
+    const nearestNeighbour = index.getNNsByVector(userVector, NUM_NEIGHBORS);
   
-    return nearestNeighbors;
+    return nearestNeighbour;
   }
   

@@ -9,10 +9,10 @@ import {
 import Home from './components/Home'
 import SignIn from './components/SignIn'
 import { useAuth } from './context/AuthContext'
-import Stats from 'components/Stats'
-import Users from 'components/Users'
-import BottomNav from 'components/BottomNav'
-import Match from 'components/Match'
+import Stats from './components/Stats'
+import Users from './components/Users'
+import BottomNav from './components/BottomNav'
+import Match from './components/Match'
 
 const App: React.FC = () => {
   const authContext = useAuth()

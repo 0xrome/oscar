@@ -3,7 +3,8 @@ import {attributesToVector,
 import functions = require("firebase-functions");
 import admin = require("firebase-admin");
 
-import { updateUserIndex } from '../../src/annoy/updateUserIndex'; // Adjust the path to the correct location of updateUserIndex.ts
+// Adjust the path to the correct location of updateUserIndex.ts
+import {updateUserIndex} from "../../shared/annoy/updateUserIndex";
 
 // Initialize Firebase Admin SDK
 if (!admin.apps.length) {

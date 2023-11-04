@@ -14,9 +14,14 @@
       "isolatedModules": true,
       "noEmit": true,
       "jsx": "react",
-      "baseUrl": "./src"
+      "baseUrl": ".",
+      "paths": {
+      "*": ["src/*", "../shared/*"]
     },
-    "include": ["src/**/*.ts", "src/**/*.tsx"],
-    "exclude": ["node_modules"]
-  }
+  },
+  "include": [
+    "src/**/*",
+    "../shared/**/*"
+  ]
+}
   
