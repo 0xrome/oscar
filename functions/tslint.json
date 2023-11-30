@@ -1,0 +1,9 @@
+{
+    "rules": {},
+    "linterOptions": {
+      "exclude": [
+        "**/*.d.ts",
+        "**/*.js"
+      ]
+    }
+  }

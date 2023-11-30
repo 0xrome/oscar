@@ -4,7 +4,7 @@ import functions = require("firebase-functions");
 import admin = require("firebase-admin");
 
 // Adjust the path to the correct location of updateUserIndex.ts
-import {updateUserIndex} from "../../shared/annoy/updateUserIndex";
+// import {updateUserIndex} from "../../shared/annoy/updateUserIndex";
 
 // Initialize Firebase Admin SDK
 if (!admin.apps.length) {
@@ -58,6 +58,6 @@ export const addUserVectors = functions.firestore
     });
 
     // Call updateUserIndex once Firestore update is done
-    console.log("calling updateUserIndex...");
-    updateUserIndex(context.params.userId, attributesVector, preferencesVector);
+    // console.log("calling updateUserIndex...");
+    // updateUserIndex(context.params.userId, attributesVector, preferencesVector);
   });

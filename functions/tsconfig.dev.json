@@ -1,5 +1,9 @@
-{
-  "include": [
-    ".eslintrc.js"
+"rules": {
+  "no-unused-variable": true
+},
+"linterOptions": {
+  "exclude": [
+    "**/*.d.ts",
+    "**/*.js"
   ]
 }
