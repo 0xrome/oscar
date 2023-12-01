@@ -5,9 +5,9 @@ export const newMatch = functions.firestore.document('Matches/{matchId}').onCrea
     const newMatch = snapshot.data();
     const { userAName, userABio, userAEmail, userBName, userBBio, userBEmail } = newMatch;
     console.log('New match found:', newMatch);
-3
+
     const messageToUserA = {
-        template_name: 'test-user-a',
+        template_name: 'test',
         template_content: [
             { name: 'userAName', content: userAName },
             { name: 'userBName', content: userBName },
@@ -15,13 +15,13 @@ export const newMatch = functions.firestore.document('Matches/{matchId}').onCrea
         ],
         message: {
             subject: 'New Match Found!',
-            from_email: 'matchedbyoscar@gmail.com',
+            from_email: 'hi@matchedbyoscar.com',
             to: [{ email: userAEmail, name: userAName, type: 'to' }],
         }
     };
 
     const messageToUserB = {
-        template_name: 'test-user-b',
+        template_name: 'test',
         template_content: [ 
             { name: 'userBName', content: userBName },
             { name: 'userAName', content: userAName },
@@ -29,7 +29,7 @@ export const newMatch = functions.firestore.document('Matches/{matchId}').onCrea
         ],
         message: {
             subject: 'New Match Found!',
-            from_email: 'matchedbyoscar@gmail.com',
+            from_email: 'hi@matchedbyoscar.com',
             to: [{ email: userBEmail, name: userBName, type: 'to' }],
         }
     };
