@@ -5,7 +5,7 @@ export const newMatch = functions.firestore.document('Matches/{matchId}').onCrea
     const newMatch = snapshot.data();
     const { userAName, userABio, userAEmail, userBName, userBBio, userBEmail } = newMatch;
     console.log('New match found:', newMatch);
-
+3
     const messageToUserA = {
         template_name: 'test-user-a',
         template_content: [
@@ -34,11 +34,13 @@ export const newMatch = functions.firestore.document('Matches/{matchId}').onCrea
         }
     };
 
-    mailchimpClient.messages.sendTemplate(messageToUserA)
-                .then(() => console.log('Email sent to User A successfully.'))
-                .catch((err: any) => console.error('Failed to send email to User A:', err));
-
-            mailchimpClient.messages.sendTemplate(messageToUserB)
-                .then(() => console.log('Email sent to User B successfully.'))
-                .catch((err: any) => console.error('Failed to send email to User B:', err));
+    return Promise.all([
+        mailchimpClient.messages.sendTemplate(messageToUserA)
+            .then(() => console.log('Email sent to User A successfully.'))
+            .catch((err: any) => console.error('Failed to send email to User A:', err)),
+    
+        mailchimpClient.messages.sendTemplate(messageToUserB)
+            .then(() => console.log('Email sent to User B successfully.'))
+            .catch((err: any) => console.error('Failed to send email to User B:', err))
+    ]);
 });
