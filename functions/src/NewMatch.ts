@@ -15,7 +15,7 @@ export const newMatch = functions.firestore.document('Matches/{matchId}').onCrea
         ],
         message: {
             subject: 'New Match Found!',
-            from_email: 'hi@matchedbyoscar.com',
+            from_email: 'matchedbyoscar@gmail.com',
             to: [{ email: userAEmail, name: userAName, type: 'to' }],
         }
     };
@@ -29,7 +29,7 @@ export const newMatch = functions.firestore.document('Matches/{matchId}').onCrea
         ],
         message: {
             subject: 'New Match Found!',
-            from_email: 'hi@matchedbyoscar.com',
+            from_email: 'matchedbyoscar@gmail.com',
             to: [{ email: userBEmail, name: userBName, type: 'to' }],
         }
     };
