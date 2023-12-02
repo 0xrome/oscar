@@ -2,6 +2,7 @@
 import {typeformWebhook} from "./typeformWebhook";
 import {addUserVectors} from "./userVectors";
 import {newMatch} from "./newMatch"; 
+import { createWeeklySurvey } from "./createWeeklySurvey";
 
 // Exporting the functions so they are available to Firebase
-export {typeformWebhook, addUserVectors, newMatch};
+export {typeformWebhook, addUserVectors, newMatch, createWeeklySurvey};
