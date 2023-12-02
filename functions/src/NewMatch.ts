@@ -7,30 +7,32 @@ export const newMatch = functions.firestore.document('Matches/{matchId}').onCrea
     console.log('New match found:', newMatch);
 
     const messageToUserA = {
-        template_name: 'test',
-        template_content: [
-            { name: 'userAName', content: userAName },
-            { name: 'userBName', content: userBName },
-            { name: 'userBBio', content: userBBio }
-        ],
+        template_name: 'match-found',
+        template_content: [], 
         message: {
             subject: 'New Match Found!',
             from_email: 'hi@matchedbyoscar.com',
             to: [{ email: userAEmail, name: userAName, type: 'to' }],
+            global_merge_vars: [
+                { name: 'userAName', content: userAName },
+                { name: 'userBName', content: userBName },
+                { name: 'userBBio', content: userBBio }
+            ]
         }
     };
 
     const messageToUserB = {
-        template_name: 'test',
-        template_content: [ 
-            { name: 'userBName', content: userBName },
-            { name: 'userAName', content: userAName },
-            { name: 'userABio', content: userABio }
-        ],
+        template_name: 'match-found-user-b',
+        template_content: [],
         message: {
             subject: 'New Match Found!',
             from_email: 'hi@matchedbyoscar.com',
             to: [{ email: userBEmail, name: userBName, type: 'to' }],
+            global_merge_vars: [ 
+                { name: 'userBName', content: userBName },
+                { name: 'userAName', content: userAName },
+                { name: 'userABio', content: userABio }
+            ]
         }
     };
 
