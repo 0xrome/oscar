@@ -1,48 +1,62 @@
 import * as functions from 'firebase-functions';
 import mailchimpClient from '../../utils/mailchimpSetup';
+import * as admin from 'firebase-admin';
 
-export const newMatch = functions.firestore.document('Matches/{matchId}').onCreate((snapshot, context) => {
-    const newMatch = snapshot.data();
-    const { userAName, userABio, userAEmail, userBName, userBBio, userBEmail } = newMatch;
-    console.log('New match found:', newMatch);
+async function getAndStoreSurveyURLs(userAEmail: string, userBEmail: string, snapshot: any) {
+    // Initialize Firestore
+    const db = admin.firestore();
 
-    const messageToUserA = {
+    // Retrieve the survey URL from Firestore
+    const surveyQuery = await db.collection('Surveys')
+                            .orderBy('createdAt', 'desc')
+                            .limit(1)
+                            .get();
+    const surveyDoc = surveyQuery.docs[0];
+    const availabilitySurvey = surveyDoc.data().url;
+    console.log('Availability survey URL:', availabilitySurvey);
+
+    // Append the email address to the survey URL
+    const availabilitySurveyUserA = availabilitySurvey + userAEmail;
+    const availabilitySurveyUserB = availabilitySurvey + userBEmail;
+    console.log('Availability survey URL for User A:', availabilitySurveyUserA);
+    console.log('Availability survey URL for User B:', availabilitySurveyUserB);
+
+    // Add the survey links to the match data
+    await snapshot.ref.update({ availabilitySurveyUserA, availabilitySurveyUserB, availabilitySurvey });
+
+    return { availabilitySurveyUserA, availabilitySurveyUserB };
+}
+
+async function sendMessage(userEmail: string, userName: string, otherUserName: string, otherUserBio: string, availabilitySurvey: string) {
+    const message = {
         template_name: 'match-found',
         template_content: [], 
         message: {
             subject: 'New Match Found!',
             from_email: 'hi@matchedbyoscar.com',
-            to: [{ email: userAEmail, name: userAName, type: 'to' }],
+            to: [{ email: userEmail, name: userName, type: 'to' }],
             global_merge_vars: [
-                { name: 'userAName', content: userAName },
-                { name: 'userBName', content: userBName },
-                { name: 'userBBio', content: userBBio }
+                { name: 'userName', content: userName },
+                { name: 'otherUserName', content: otherUserName },
+                { name: 'otherUserBio', content: otherUserBio },
+                { name: 'availabilitySurvey', content: availabilitySurvey }
             ]
         }
     };
 
-    const messageToUserB = {
-        template_name: 'match-found-user-b',
-        template_content: [],
-        message: {
-            subject: 'New Match Found!',
-            from_email: 'hi@matchedbyoscar.com',
-            to: [{ email: userBEmail, name: userBName, type: 'to' }],
-            global_merge_vars: [ 
-                { name: 'userBName', content: userBName },
-                { name: 'userAName', content: userAName },
-                { name: 'userABio', content: userABio }
-            ]
-        }
-    };
+    return mailchimpClient.messages.sendTemplate(message)
+        .then(() => console.log(`Email sent to ${userName} successfully.`))
+        .catch((err: any) => console.error(`Failed to send email to ${userName}:`, err));
+}
 
-    return Promise.all([
-        mailchimpClient.messages.sendTemplate(messageToUserA)
-            .then(() => console.log('Email sent to User A successfully.'))
-            .catch((err: any) => console.error('Failed to send email to User A:', err)),
-    
-        mailchimpClient.messages.sendTemplate(messageToUserB)
-            .then(() => console.log('Email sent to User B successfully.'))
-            .catch((err: any) => console.error('Failed to send email to User B:', err))
+export const newMatch = functions.firestore.document('Matches/{matchId}').onCreate(async (snapshot, context) => {
+    const newMatch = snapshot.data();
+    const { userAName, userABio, userAEmail, userBName, userBBio, userBEmail } = newMatch;
+    console.log('New match found:', newMatch);
+
+    const { availabilitySurveyUserA, availabilitySurveyUserB } = await getAndStoreSurveyURLs(userAEmail, userBEmail, snapshot);
+    await Promise.all([
+        sendMessage(userAEmail, userAName, userBName, userBBio, availabilitySurveyUserA),
+        sendMessage(userBEmail, userBName, userAName, userABio, availabilitySurveyUserB)
     ]);
 });
