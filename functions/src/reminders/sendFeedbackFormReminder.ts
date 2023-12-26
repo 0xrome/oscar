@@ -1,4 +1,4 @@
-export const sendFormReminder = async () => {
+export const sendFeedbackFormReminder = async () => {
     const now = admin.firestore.Timestamp.now();
     const twentyFourHoursAgo = moment(now.toDate()).subtract(24, 'hours').toDate();
   

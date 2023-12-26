@@ -1,7 +1,8 @@
 import * as functions from 'firebase-functions';
 import mailchimpClient from '../../utils/mailchimpSetup';
-import * as admin from 'firebase-admin';
+import db from './utils/db';
 
+// TODO: Build out tests
 export const newMatch = functions.firestore.document('Matches/{matchId}').onCreate(async (snapshot, context) => {
     const newMatch = snapshot.data();
     const { userAName, userABio, userAEmail, userBName, userBBio, userBEmail } = newMatch;
@@ -15,8 +16,6 @@ export const newMatch = functions.firestore.document('Matches/{matchId}').onCrea
 });
 
 async function getAndStoreSurveyURLs(userAEmail: string, userBEmail: string, snapshot: any) {
-    // Initialize Firestore
-    const db = admin.firestore();
 
     // Retrieve the survey URL from Firestore
     const surveyQuery = await db.collection('Surveys')

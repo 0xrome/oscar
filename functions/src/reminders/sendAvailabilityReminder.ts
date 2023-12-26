@@ -2,9 +2,10 @@ import * as admin from 'firebase-admin';
 import * as moment from 'moment';
 import axios from 'axios';
 
-import db from './utils/db';
+import db from '../utils/db';
 
-
+// TODO: Get users phone numbers for WA reminder
+// TODO: Build tests
 export const sendAvailabilityReminder = async () => {
     // Get the current date and time
     const now = admin.firestore.Timestamp.now();
@@ -12,12 +13,12 @@ export const sendAvailabilityReminder = async () => {
     // Calculate the date and time 24 hours ago
     const twentyFourHoursAgo = moment(now.toDate()).subtract(24, 'hours').toDate();
 
-    // Calculate the date and time 25 hours ago
-    const twentyFiveHoursAgo = moment(now.toDate()).subtract(25, 'hours').toDate();
+    // Calculate the date and time 26 hours ago
+    const twentySixHoursAgo = moment(now.toDate()).subtract(26, 'hours').toDate();
 
-    // Query for matches that were created between 24 and 25 hours ago and the reminder hasn't been sent
+    // Query for matches that were created between 24 and 26 hours ago and the reminder hasn't been sent
     const matchesQuery = await db.collection('Matches')
-                            .where('createdAt', '>', twentyFiveHoursAgo)
+                            .where('createdAt', '>', twentySixHoursAgo)
                             .where('createdAt', '<=', twentyFourHoursAgo)
                             .where('reminderSent', '==', false)
                             .get();
@@ -48,6 +49,8 @@ export const sendAvailabilityReminder = async () => {
     });
 };
 
+// TODO: Update based on Whatsapp response
+// TODO: Create WA utility function
 async function sendReminderMessage(userEmail: string) {
     // Use the WhatsApp API to send a message
     // See https://developers.facebook.com/docs/whatsapp/api/messages for more information

@@ -2,7 +2,7 @@ import * as admin from 'firebase-admin';
 import * as moment from 'moment';
 import axios from 'axios';
 
-import db from './utils/db';
+import db from '../utils/db';
 
 export const sendPaymentReminderOrCancel = async () => {
     const now = admin.firestore.Timestamp.now();
