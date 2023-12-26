@@ -68,7 +68,6 @@ app.post('/api/query-nearest-neighbour', async (req: { body: { combinedVector: a
   console.log('Start queryNearestNeighbour API call');
   console.log("Request body:", req.body);
   const { combinedVector } = req.body;
-    console.log("combined vector: ", combinedVector);
   try {
     const neighbors = searchNearestNeighbors(combinedVector, 10);
     res.json({ neighbors });

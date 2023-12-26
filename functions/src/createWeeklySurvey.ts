@@ -2,6 +2,8 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import axios from 'axios';
 
+// TODO: Set up a Firebase Cloud Function that runs on a schedule every week
+// TODO: Build out tests
 export const createWeeklySurvey = functions.https.onRequest(async (req, res) => {
     try {
         const typeformApiKey = functions.config().typeform.key;
@@ -72,7 +74,7 @@ export const createWeeklySurvey = functions.https.onRequest(async (req, res) => 
         const createResponse = await axios.post('https://api.typeform.com/forms', survey, {
             headers: { Authorization: `Bearer ${typeformApiKey}` }
         });
-        // formId = createResponse.data.id;
+        
         surveyRef = createResponse;
 
         // console.log('Form updated successfully');

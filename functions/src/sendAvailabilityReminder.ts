@@ -1,11 +1,11 @@
-import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as moment from 'moment';
 import axios from 'axios';
 
-export const sendReminder = functions.pubsub.schedule('every 1 hours').onRun(async (context) => {
-    const db = admin.firestore();
+import db from './utils/db';
 
+
+export const sendAvailabilityReminder = async () => {
     // Get the current date and time
     const now = admin.firestore.Timestamp.now();
 
@@ -46,7 +46,7 @@ export const sendReminder = functions.pubsub.schedule('every 1 hours').onRun(asy
             await doc.ref.update({ reminderSent: true });
         }
     });
-});
+};
 
 async function sendReminderMessage(userEmail: string) {
     // Use the WhatsApp API to send a message

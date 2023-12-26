@@ -2,6 +2,18 @@ import * as functions from 'firebase-functions';
 import mailchimpClient from '../../utils/mailchimpSetup';
 import * as admin from 'firebase-admin';
 
+export const newMatch = functions.firestore.document('Matches/{matchId}').onCreate(async (snapshot, context) => {
+    const newMatch = snapshot.data();
+    const { userAName, userABio, userAEmail, userBName, userBBio, userBEmail } = newMatch;
+    console.log('New match found:', newMatch);
+
+    const { availabilitySurveyUserA, availabilitySurveyUserB } = await getAndStoreSurveyURLs(userAEmail, userBEmail, snapshot);
+    await Promise.all([
+        sendMessage(userAEmail, userAName, userBName, userBBio, availabilitySurveyUserA),
+        sendMessage(userBEmail, userBName, userAName, userABio, availabilitySurveyUserB)
+    ]);
+});
+
 async function getAndStoreSurveyURLs(userAEmail: string, userBEmail: string, snapshot: any) {
     // Initialize Firestore
     const db = admin.firestore();
@@ -48,15 +60,3 @@ async function sendMessage(userEmail: string, userName: string, otherUserName: s
         .then(() => console.log(`Email sent to ${userName} successfully.`))
         .catch((err: any) => console.error(`Failed to send email to ${userName}:`, err));
 }
-
-export const newMatch = functions.firestore.document('Matches/{matchId}').onCreate(async (snapshot, context) => {
-    const newMatch = snapshot.data();
-    const { userAName, userABio, userAEmail, userBName, userBBio, userBEmail } = newMatch;
-    console.log('New match found:', newMatch);
-
-    const { availabilitySurveyUserA, availabilitySurveyUserB } = await getAndStoreSurveyURLs(userAEmail, userBEmail, snapshot);
-    await Promise.all([
-        sendMessage(userAEmail, userAName, userBName, userBBio, availabilitySurveyUserA),
-        sendMessage(userBEmail, userBName, userAName, userABio, availabilitySurveyUserB)
-    ]);
-});

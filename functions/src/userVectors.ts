@@ -11,6 +11,7 @@ if (!admin.apps.length) {
   admin.initializeApp();
 }
 
+// TODO: Build out tests
 export const addUserVectors = functions.firestore
   .document("typeformResponses/{userId}")
   .onCreate(async (snapshot: { data: () => any; ref: { update: (arg0:
@@ -20,6 +21,7 @@ export const addUserVectors = functions.firestore
     console.log("User Data:", userData);
 
 
+    // TODO: Convert more of the user's attributes and preferences to vectors using the `attributesToVector` and `preferencesToVector` functions
     // Assuming your Typeform data has a consistent structure
     // Extract attributes and preferences
     // typeform responses are i+2 the answers array (ISH!)
