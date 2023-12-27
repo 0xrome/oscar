@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// TODO: build funnction, try and use WA utility function
 export async function sendWhatsappMessageToBar(matchDate: Date) {
   const message = {
     phone: 'bar-phone-number', // Replace with the bar's phone number

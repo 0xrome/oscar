@@ -2,7 +2,7 @@ import { sendWhatsappMessageToBar } from './utils/sendWhatsappMessageToBar';
 
 export const whatsappWebhook = functions.https.onRequest(async (req, res) => {
     const messages = req.body.messages;
-  
+    // TODO: Update Whatsapp logic based on Whatsapp API access
     for (const message of messages) {
       if (message.from === 'bar-phone-number' && message.type === 'text') {
         if (message.text === 'yes') {
@@ -29,7 +29,7 @@ export const whatsappWebhook = functions.https.onRequest(async (req, res) => {
     res.sendStatus(200);
   });
 
-
+  // TODO: Build email, try and use utility function
   async function sendLocationDetailsEmail(email: string, location: string) {
     const message = {
       from_email: 'your-email@example.com',
@@ -56,7 +56,8 @@ export const whatsappWebhook = functions.https.onRequest(async (req, res) => {
     const barsSnapshot = await admin.firestore().collection('Bars').get();
     const bars = barsSnapshot.docs.map(doc => doc.data());
   
-    // TODO: Logic to determine the next bar
+    // TODO: Build bars Collection
+    // TODO: Create logic to determine the next bar
     // This example simply returns the first bar in the collection
     // Replace this with your actual logic to determine the next bar
     const nextBar = bars[0];

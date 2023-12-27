@@ -77,7 +77,8 @@ export const onSurveySubmit = functions.https.onRequest(async (req, res) => {
 
             try {
                 // Call createStripePaymentLink and store the returned Stripe payment link in the Matches document
-                const stripePayment = await createStripePaymentLink();
+                const userPaymentField = isUserA ? 'userAPayment' : 'userBPayment';
+                const stripePayment = await createStripePaymentLink(match.ref, userPaymentField);
                 await match.ref.update({ status: 'matched', matchDate, stripePayment });
 
                  // Send payment link email to both users
@@ -138,7 +139,7 @@ async function sendCancellationEmail(email: string) {
 }
 
 // TODO: Build out createStripePaymentLink
-async function createStripePaymentLink(): Promise<string> {
+async function createStripePaymentLink(matchRef: admin.firestore.DocumentReference<admin.firestore.DocumentData>, userField: string): Promise<string> {
     try {
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
@@ -150,7 +151,10 @@ async function createStripePaymentLink(): Promise<string> {
         success_url: 'https://example.com/success',
         cancel_url: 'https://example.com/cancel',
       });
-  
+
+      // Update the Matches document with the session ID
+      await matchRef.update({ [userField]: session.id });
+
       return session.url;
     } catch (error) {
       console.error(`Failed to create Stripe payment link: ${error}`);

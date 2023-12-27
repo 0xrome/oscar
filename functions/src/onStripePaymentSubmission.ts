@@ -5,6 +5,9 @@ import axios from 'axios';
 
 import { sendWhatsappMessageToBar } from './utils/sendWhatsappMessageToBar';
 
+// TODO: Sort out Stripe API credentials
+// TODO: Create webhook in Stripe dashboard and add the endpoint URL
+// TODO: Firebase function response alwats{ received: true }, update to reflect the actual response
 const stripe = new Stripe('your-stripe-secret-key', { apiVersion: '2020-08-27' });
 
 export const onStripePaymentSubmission = functions.https.onRequest(async (req, res) => {
@@ -22,26 +25,45 @@ export const onStripePaymentSubmission = functions.https.onRequest(async (req, r
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
 
-    // Retrieve the Match document using the session ID
-    const matchSnapshot = await admin.firestore().collection('Matches').doc(session.id).get();
-    const matchData = matchSnapshot.data();
+    // TODO: Ensure that there are sessionIDs or similar field in the Match document, if not, create a connection between the two
+    // TODO: Ensure there are userAPayment and userBPayment fields in the Match document
+    // TODO: Handle the case where the session ID doesn't match any documents in the Matches collection
+    // Query the Matches collection to find the document with the corresponding session ID
+    const userAPaymentSnapshot = await admin.firestore().collection('Matches')
+    .where('userAPayment', '==', session.id)
+    .get();
 
-    if (matchData) {
+    const userBPaymentSnapshot = await admin.firestore().collection('Matches')
+    .where('userBPayment', '==', session.id)
+    .get();
+
+    let matchDoc;
+    if (!userAPaymentSnapshot.empty) {
+      matchDoc = userAPaymentSnapshot.docs[0];
+    } else if (!userBPaymentSnapshot.empty) {
+      matchDoc = userBPaymentSnapshot.docs[0];
+    }
+
+    // TODO: Handle the case where the session ID doesn't match any documents in the Matches collection
+    // TODO: Extensively test payment status updates
+    if (matchDoc) {
+      const matchData = matchDoc.data();
+
       // Update the payment status for the user to 'paid'
       const userPaymentStatusField = matchData.userAPayment === session.id ? 'userAPaymentStatus' : 'userBPaymentStatus';
-      await matchSnapshot.ref.update({ [userPaymentStatusField]: 'paid' });
+      await matchDoc.ref.update({ [userPaymentStatusField]: 'paid' });
 
       // Check if the other user has paid
       const otherUserPaymentStatusField = userPaymentStatusField === 'userAPaymentStatus' ? 'userBPaymentStatus' : 'userAPaymentStatus';
       const otherUserPaymentStatus = matchData[otherUserPaymentStatusField];
 
-      if (otherUserPaymentStatus !== 'paid') {
-        // If the other user hasn't paid, send an email to the user that has just paid
-        const userEmail = userPaymentStatusField === 'userAPaymentStatus' ? matchData.userAEmail : matchData.userBEmail;
-        await sendPaymentConfirmationEmail(userEmail);
-      } else {
+      // Send an email to the user that has just paid
+      const userEmail = userPaymentStatusField === 'userAPaymentStatus' ? matchData.userAEmail : matchData.userBEmail;
+      await sendPaymentConfirmationEmail(userEmail);
+
+      if (otherUserPaymentStatus === 'paid') {
         // If the other user has paid, update the date's status and send a Whatsapp message to the bar
-        await matchSnapshot.ref.update({ dateStatus: 'confirmed' });
+        await matchDoc.ref.update({ dateStatus: 'confirmed' });
         await sendWhatsappMessageToBar(matchData.matchDate);
       }
     }
@@ -50,6 +72,7 @@ export const onStripePaymentSubmission = functions.https.onRequest(async (req, r
   res.json({ received: true });
 });
 
+// TODO: Build email, try and use utility function
 async function sendPaymentConfirmationEmail(email: string) {
     const message = {
       from_email: 'your-email@example.com',
