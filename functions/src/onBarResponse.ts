@@ -1,6 +1,7 @@
 import { sendWhatsappMessageToBar } from './utils/sendWhatsappMessageToBar';
 
-export const whatsappWebhook = functions.https.onRequest(async (req, res) => {
+// TODO: Update naming to be more clear
+export const onBarResponse = functions.https.onRequest(async (req, res) => {
     const messages = req.body.messages;
     // TODO: Update Whatsapp logic based on Whatsapp API access
     for (const message of messages) {

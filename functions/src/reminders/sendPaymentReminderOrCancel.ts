@@ -29,6 +29,7 @@ export const sendPaymentReminder = async () => {
   });
 }
 
+// TODO: Do we need to update the naming to make a clear distinction beween cancelling here and cancelling after payment?
 export const cancelUnpaidDates = async () => {
   const now = admin.firestore.Timestamp.now();
   const fortyEightHoursAgo = moment(now.toDate()).subtract(48, 'hours').toDate();

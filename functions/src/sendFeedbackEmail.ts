@@ -15,8 +15,9 @@ export const sendFeedbackEmail = functions.pubsub.schedule('every 1 hours').onRu
   matchesSnapshot.forEach(async (doc) => {
     const match = doc.data();
 
-    const surveyLink = "https://your_mailchimp_survey_link"; // TODO: Replace with your actual Mailchimp survey link
+    const surveyLink = "https://your_mailchimp_survey_link"; // TODO: Replace with actual Mailchimp survey link
 
+    // TODO: Replace with actual Mailchimp API key + template name
     await axios.post('https://api.mailchimp.com/3.0/transactional/send', {
       template_name: "your_template_name",
       message: {

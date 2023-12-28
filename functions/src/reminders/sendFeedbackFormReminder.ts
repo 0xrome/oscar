@@ -17,6 +17,7 @@ export const sendFeedbackFormReminder = async () => {
     });
   }
   
+  // TODO: Update to use WA utiltiy function if possible
   const sendWhatsappMessage = async (phoneNumber: string, message: string) => {
     const requestBody = {
       phone: phoneNumber,
