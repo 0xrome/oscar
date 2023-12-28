@@ -1,9 +1,8 @@
 import axios from 'axios';
 
-// TODO: build funnction, try and use WA utility function
-export async function sendWhatsappMessageToBar(matchDate: Date) {
+export async function sendWhatsappMessageToBar(phoneNumber: string, matchDate: Date) {
   const message = {
-    phone: 'bar-phone-number', // Replace with the bar's phone number
+    phone: phoneNumber, // Use the provided phone number
     body: `A table for two has been booked for ${matchDate.toISOString()}.`,
   };
 

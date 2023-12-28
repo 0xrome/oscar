@@ -13,7 +13,7 @@ export const onTagChange = functions.https.onRequest(async (req, res) => {
 
   const oldTags = userData.tags || [];
   const addedTags = newTags.filter((tag: any) => !oldTags.includes(tag));
-  const removedTags = oldTags.filter((tag: any) => !newTags.includes(tag));
+  // const removedTags = oldTags.filter((tag: any) => !newTags.includes(tag));
   // TODO: Add logic to handle removed tags
   // TODO: add logic for other tags
   for (const tag of addedTags) {
@@ -40,7 +40,12 @@ async function processDateCancellationWebhook(email: string, userDoc: FirebaseFi
   // TODO: get the match ID from the user document
   const matchId = userDoc.data().id; // Replace with the correct field name for the match ID
   const matchDoc = await db.collection('Matches').doc(matchId).get();
-  const match = matchDoc.data();
+  if (!matchDoc.exists) {
+      console.error(`Match with ID ${matchId} does not exist`);
+      return; // Exit the function if the match does not exist
+  }
+  const match = matchDoc.data() as any;
+  
 
   // TODO: See if there's a better way to do this with the WA API
   const cancellationMessage = `The date scheduled at ${match.location} on ${match.date.toDate()} has been cancelled.`;

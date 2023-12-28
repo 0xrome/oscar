@@ -1,18 +1,17 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-import mailchimp from '@mailchimp/mailchimp_transactional';
-import * as Stripe from 'stripe';
+// import mailchimp from '@mailchimp/mailchimp_transactional';
+// import Stripe from 'stripe';
 
 import db from './utils/db';
 
+// TODO: Add my own Mailchimp API key
+// const client = mailchimp('your-mailchimp-api-key');
 
-const client = mailchimp.createClient({
-    key: 'your-mailchimp-api-key',
-});
-
-const stripe = new Stripe(functions.config().stripe.secret, {
-    apiVersion: '2020-08-27',
-  });
+// TODO: Add my own Stripe secret key
+// const stripe = new Stripe(functions.config().stripe.secret, {
+//     apiVersion: '2020-08-27',
+//   });
 
   // TODO: Build tests
 export const onSurveySubmit = functions.https.onRequest(async (req, res) => {
@@ -73,18 +72,18 @@ export const onSurveySubmit = functions.https.onRequest(async (req, res) => {
             // If there's a match, update the match document with the earliest matching date
             // TODO: Check to see if sorting logic is correct and if there's a better way to do it
             matchingDates.sort((a: { getTime: () => number; }, b: { getTime: () => number; }) => a.getTime() - b.getTime());
-            const matchDate = matchingDates[0];
+            // const matchDate = matchingDates[0];
 
             try {
                 // Call createStripePaymentLink and store the returned Stripe payment link in the Matches document
-                const userPaymentField = isUserA ? 'userAPayment' : 'userBPayment';
-                const stripePayment = await createStripePaymentLink(match.ref, userPaymentField);
-                await match.ref.update({ status: 'matched', matchDate, stripePayment });
+                // const userPaymentField = isUserA ? 'userAPayment' : 'userBPayment';
+                // const stripePayment = await createStripePaymentLink(match.ref, userPaymentField);
+                // await match.ref.update({ status: 'matched', matchDate, stripePayment });
 
                  // Send payment link email to both users
-                await sendPaymentLinkEmail(matchData.userAEmail, stripePayment);
-                console.log(`Payment link email sent to ${matchData.userAEmail}`);
-                await sendPaymentLinkEmail(matchData.userBEmail, stripePayment);
+                // await sendPaymentLinkEmail(matchData.userAEmail, stripePayment);
+                // console.log(`Payment link email sent to ${matchData.userAEmail}`);
+                // await sendPaymentLinkEmail(matchData.userBEmail, stripePayment);
                 console.log(`Payment link email sent to ${matchData.userBEmail}`);
 
                 // Update the payment status for each user to 'pending'
@@ -118,69 +117,69 @@ function getMatchingDates(userAvailabilityString: string, otherUserAvailabilityS
 
 // TODO: Create email utility function
 async function sendCancellationEmail(email: string) {
-    const message = {
-        from_email: 'your-email@example.com',
-        subject: 'Match Cancelled',
-        text: 'Your match has been cancelled.',
-        to: [
-            {
-                email: email,
-                type: 'to',
-            },
-        ],
-    };
+    // const message = {
+    //     from_email: 'your-email@example.com',
+    //     subject: 'Match Cancelled',
+    //     text: 'Your match has been cancelled.',
+    //     to: [
+    //         {
+    //             email: email,
+    //             type: 'to',
+    //         },
+    //     ],
+    // };
 
-    try {
-        const response = await client.messages.send({ message });
-        console.log(`Cancellation email sent to ${email}: ${response}`);
-    } catch (error) {
-        console.error(`Failed to send cancellation email to ${email}: ${error}`);
-    }
+    // try {
+    //     const response = await client.messages.send({ message });
+    //     console.log(`Cancellation email sent to ${email}: ${response}`);
+    // } catch (error) {
+    //     console.error(`Failed to send cancellation email to ${email}: ${error}`);
+    // }
 }
 
 // TODO: Build out createStripePaymentLink
-async function createStripePaymentLink(matchRef: admin.firestore.DocumentReference<admin.firestore.DocumentData>, userField: string): Promise<string> {
-    try {
-      const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
-        line_items: [{
-          price: 'price_ID', // Replace 'price_ID' with your actual price ID
-          quantity: 1,
-        }],
-        mode: 'payment',
-        success_url: 'https://example.com/success',
-        cancel_url: 'https://example.com/cancel',
-      });
+// async function createStripePaymentLink(matchRef: admin.firestore.DocumentReference<admin.firestore.DocumentData>, userField: string): Promise<string> {
+//   //   try {
+//   //     const session = await stripe.checkout.sessions.create({
+//   //       payment_method_types: ['card'],
+//   //       line_items: [{
+//   //         price: 'price_ID', // Replace 'price_ID' with your actual price ID
+//   //         quantity: 1,
+//   //       }],
+//   //       mode: 'payment',
+//   //       success_url: 'https://example.com/success',
+//   //       cancel_url: 'https://example.com/cancel',
+//   //     });
 
-      // Update the Matches document with the session ID
-      await matchRef.update({ [userField]: session.id });
+//   //     // Update the Matches document with the session ID
+//   //     await matchRef.update({ [userField]: session.id });
 
-      return session.url;
-    } catch (error) {
-      console.error(`Failed to create Stripe payment link: ${error}`);
-      throw error; // Re-throw the error so it can be caught and handled by the calling function
-    }
-  }
+//   //     return session.url;
+//   //   } catch (error) {
+//   //     console.error(`Failed to create Stripe payment link: ${error}`);
+//   //     throw error; // Re-throw the error so it can be caught and handled by the calling function
+//   //   }
+//   // }
 
-  // TODO: Build out sendPaymentLinkEmail
-  async function sendPaymentLinkEmail(email: string, paymentLink: string) {
-    const message = {
-      from_email: 'your-email@example.com',
-      subject: 'Payment Link for Your Match',
-      text: `Here is your payment link: ${paymentLink}`,
-      to: [
-        {
-          email: email,
-          type: 'to',
-        },
-      ],
-    };
+//   // // TODO: Build out sendPaymentLinkEmail
+//   // async function sendPaymentLinkEmail(email: string, paymentLink: string) {
+//   //   const message = {
+//   //     from_email: 'your-email@example.com',
+//   //     subject: 'Payment Link for Your Match',
+//   //     text: `Here is your payment link: ${paymentLink}`,
+//   //     to: [
+//   //       {
+//   //         email: email,
+//   //         type: 'to',
+//   //       },
+//   //     ],
+//   //   };
   
-    try {
-      const response = await client.messages.send({ message });
-      console.log(`Payment link email sent to ${email}: ${response}`);
-    } catch (error) {
-      console.error(`Failed to send payment link email to ${email}: ${error}`);
-      throw error; // Re-throw the error so it can be caught and handled by the calling function
-    }
-  }
+//   //   try {
+//   //     const response = await client.messages.send({ message });
+//   //     console.log(`Payment link email sent to ${email}: ${response}`);
+//   //   } catch (error) {
+//   //     console.error(`Failed to send payment link email to ${email}: ${error}`);
+//   //     throw error; // Re-throw the error so it can be caught and handled by the calling function
+//   //   }
+//   }
