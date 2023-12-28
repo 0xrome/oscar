@@ -68,7 +68,7 @@ export const createWeeklySurvey = functions.https.onRequest(async (req, res) => 
                         allow_multiple_selection: true,
                         allow_other_choice: false,
                         vertical_alignment: true,
-                        choices: getChoicesForWeek(4, 11).concat([{ label: 'None of these dates' }])
+                        choices: getChoicesForWeek(4, 11)
                     }
                 },
                 {
