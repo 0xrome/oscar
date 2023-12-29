@@ -13,8 +13,9 @@
     "outDir": "./dist",                                      /* Enable all strict type-checking options. */
     "allowSyntheticDefaultImports": true,
     "typeRoots": ["./node_modules/@types", "./types"],
-    "types": ["node"],
+    "types": ["node", "jest"],
     "resolveJsonModule": true,
+    "jsx": "react",
   },
   "exclude": [
     "node_modules",
