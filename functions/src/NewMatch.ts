@@ -2,6 +2,25 @@ import * as functions from 'firebase-functions';
 import mailchimpClient from '../../utils/mailchimpSetup';
 import db from './utils/db';
 
+// New Match document structure
+// {
+//     createdAt: Timestamp,
+//     userAName: String,
+//     userABio: String,
+//     userAEmail: String,
+//     userAPhone: String,
+//     userASurveyCompleted: Boolean,
+//     availabilitySurveyuserA: String,
+//     userBName: String,
+//     userBBio: String,
+//     userBEmail: String,
+//     userBPhone: String,
+//     userBSurveyCompleted: Boolean,
+//     availabilitySurveyuserB: String,
+//     availabilitySurvey: String,
+//     availabilityReminderSent: Boolean
+// }
+
 // TODO: Build out tests
 export const newMatch = functions.firestore.document('Matches/{matchId}').onCreate(async (snapshot, context) => {
     const newMatch = snapshot.data();

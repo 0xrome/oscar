@@ -7,7 +7,7 @@ jest.mock('firebase-functions', () => ({
     },
 }));
 
-jest.mock('./utils/db', () => ({
+jest.mock('../utils/db', () => ({
     collection: jest.fn().mockReturnThis(),
     add: jest.fn(),
 }));

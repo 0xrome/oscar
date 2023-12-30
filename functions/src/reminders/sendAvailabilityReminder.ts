@@ -1,10 +1,9 @@
 import * as admin from 'firebase-admin';
 import moment from 'moment';
-import axios from 'axios';
 
 import db from '../utils/db';
+import sendWhatsappMessage from '../utils/sendWhatsAppMessage';
 
-// TODO: Get users phone numbers for WA reminder
 // TODO: Build tests
 export const sendAvailabilityReminder = async () => {
     // Get the current date and time
@@ -26,57 +25,25 @@ export const sendAvailabilityReminder = async () => {
     // For each match, send a reminder message to the users who haven't completed their surveys
     matchesQuery.docs.forEach(async (doc) => {
         const match = doc.data();
-        const { userAEmail, userBEmail, userASurveyCompleted, userBSurveyCompleted } = match;
+        const { userASurveyCompleted, userBSurveyCompleted, userAPhone, userBPhone } = match;
 
         let reminderSent = false;
 
         // If User A hasn't completed their survey, send a reminder message and set reminderSent to true
         if (!userASurveyCompleted) {
-            await sendReminderMessage(userAEmail);
+            await sendWhatsappMessage("hello_world", userAPhone); //TODO: Update template name to availabilty_reminder
             reminderSent = true;
         }
     
         // If User B hasn't completed their survey, send a reminder message and set reminderSent to true
         if (!userBSurveyCompleted) {
-            await sendReminderMessage(userBEmail);
+            await sendWhatsappMessage("hello_world", userBPhone); //TODO: Update template name to availabilty_reminder
             reminderSent = true;
         }
     
         // If a reminder message was sent to either user, update reminderSent to true
         if (reminderSent) {
-            await doc.ref.update({ reminderSent: true });
+            await doc.ref.update({ availabilityReminderSent: true });
         }
     });
 };
-
-// TODO: Update based on Whatsapp response
-// TODO: Create WA utility function
-async function sendReminderMessage(userEmail: string) {
-    // Use the WhatsApp API to send a message
-    // See https://developers.facebook.com/docs/whatsapp/api/messages for more information
-
-    console.log(`Sending reminder message to ${userEmail}`);
-
-    const message = 'This is your reminder to fill out the survey.';
-
-    const requestBody = {
-        phone: userEmail, // Replace with the user's phone number
-        body: message,
-    };
-
-    try {
-        const response = await axios.post('https://your-whatsapp-api-url', requestBody, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            auth: {
-                username: 'your-username',
-                password: 'your-password',
-            },
-        });
-
-        console.log(`Message sent to ${userEmail}: ${response.data}`);
-    } catch (error) {
-        console.error(`Failed to send message to ${userEmail}: ${error}`);
-    }
-}
